@@ -1,0 +1,44 @@
+import pickle
+
+# Problem: Objects to File Storage (10 pts)
+# Create a Course_grades class as defined below:
+class Course_grades:
+    def __init__(self):
+        self.Course_name = ""
+        self.stu_ID = []
+        self.stu_grade = []
+    
+    def get_details(self):
+        self.Course_name = input('Enter the course name: ')
+        count = int(input('Enter the number of students you want to get info about (minimum 5): '))
+        while count < 5:
+            print("You must enter details for at least 5 students.")
+            count = int(input('Enter the number of students you want to get info about (minimum 5): '))
+        
+        for _ in range(count):
+            self.stu_ID.append(input('Enter the student ID: '))
+            grade = int(input('Enter the student grade (0-100): '))
+            while grade < 0 or grade > 100:
+                grade = int(input('Enter the student grade in correct range (0-100): '))
+            self.stu_grade.append(grade)
+
+# Main program
+# 2. Open a file (grades_info.dat) in “ab” mode.
+with open('grades_info.dat', 'ab') as f1:
+    for _ in range(4):  # 1. Create at least 4 objects for this Course_grades class.
+        cgds = Course_grades()
+        cgds.get_details()
+        pickle.dump(cgds, f1)  # 3. Write each newly created object into a file.
+
+# 4. Open the file (grades_info.dat) in “rb” mode.
+with open('grades_info.dat', 'rb') as f2:
+    try:
+        while True:  # 5. Read the 4 objects from the file
+            obj = pickle.load(f2)
+            print("Course Name:", obj.Course_name)
+            print("Student IDs:", obj.stu_ID)
+            print("Student Grades:", obj.stu_grade)
+            print("-" * 30)
+    except EOFError:
+        pass  # End of file reached
+
